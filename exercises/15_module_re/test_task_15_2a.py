@@ -4,7 +4,7 @@ import sys
 
 sys.path.append("..")
 
-from common_functions import check_function_exists
+from pyneng_common_functions import check_function_exists
 
 # Проверка что тест вызван через pytest ..., а не python ...
 from _pytest.assertion.rewrite import AssertionRewritingHook
@@ -23,6 +23,31 @@ def test_function_created():
 def test_function_return_value():
     """
     Проверка работы функции
+    """
+    headers = ["hostname", "ios", "platform"]
+    parsed_data = [
+        ("R1", "12.4(24)T1", "Cisco 3825"),
+        ("R2", "15.2(2)T1", "Cisco 2911"),
+        ("SW1", "12.2(55)SE9", "Cisco WS-C2960-8TC-L"),
+    ]
+    correct_return_value = [
+        {"hostname": "R1", "ios": "12.4(24)T1", "platform": "Cisco 3825"},
+        {"hostname": "R2", "ios": "15.2(2)T1", "platform": "Cisco 2911"},
+        {"hostname": "SW1", "ios": "12.2(55)SE9", "platform": "Cisco WS-C2960-8TC-L"},
+    ]
+    return_value = task_15_2a.convert_to_dict(headers, parsed_data)
+    assert return_value != None, "Функция ничего не возвращает"
+    assert (
+        type(return_value) == list
+    ), f"По заданию функция должна возвращать список, а возвращает {type(return_value).__name__}"
+    assert (
+        return_value == correct_return_value
+    ), "Функция возвращает неправильное значение"
+
+
+def test_function_return_value_different_args():
+    """
+    Проверка работы функции с другими аргументами
     """
     parsed_sh_ip_int_br = [
         ("FastEthernet0/0", "15.0.15.1", "up", "up"),
